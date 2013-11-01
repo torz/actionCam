@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>
+  <font size="3" color="red">{{message}}</font>
+</h1>
+{% for myfile in files %}
+<div>
+  <p>
+  File name:<b><font size="2" color="blue">{{myfile.name}}</font></b>
+  Full Path: <b><font size="2" color="blue">{{myfile.fullpath}}</font></b>
+  </p>
+</div>
+{% endfor %}
+{% endblock %}
