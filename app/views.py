@@ -10,7 +10,7 @@ def index():
 	return render_template('index.html', title='actionCam', message=msg)
 
 #############
-#	IMAGE	#
+#   IMAGE   #
 #############
 # Form to get arguments
 @app.route('/pic')
@@ -40,7 +40,7 @@ def take_pic():
 	return render_template('index.html', title='Pic Shoot', message=msg)
 
 #############
-#	VIDEO	#
+#   VIDEO   #
 #############
 # Form to get arguments
 @app.route('/video')
