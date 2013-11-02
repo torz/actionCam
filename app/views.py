@@ -2,6 +2,7 @@ from flask import render_template, request
 from app import app
 import os
 from acutils import run_cmd
+import options
 
 # not much to see here
 @app.route('/')
@@ -15,7 +16,7 @@ def index():
 # Form to get arguments
 @app.route('/pic')
 def get_pic_args():
-	return render_template('picture.html', title='Picture')
+	return render_template('shoot.html', title='Picture', selecttab=options.picture, action='/pic/shoot')
 
 # Take snapshots using the args provided
 @app.route('/pic/shoot')
@@ -45,7 +46,7 @@ def take_pic():
 # Form to get arguments
 @app.route('/video')
 def get_video_args():
-	return render_template('video.html', title='Video')
+	return render_template('shoot.html', title='Video', selecttab=options.video, action='/video/shoot')
 
 # This function should start recording video with the parameters provided
 @app.route('/video/shoot')

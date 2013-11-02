@@ -5,7 +5,7 @@ from time import sleep
 def run_cmd(cmd, delay=1, timesrun=1):
 	cmdout = []
 	for i in range(timesrun):
-		sleep(delay)
+		#sleep(delay)
 		try:
 			#subprocess.Popen(cmd, shell=False, stdin=None, stdout=None, stderr=None, close_fds=True)
 			cmdout.append(subprocess.check_output(cmd, stderr=subprocess.STDOUT))
