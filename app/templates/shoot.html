@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+
+<table width="75%" cellspacing="0" cellpadding="0" border="0" bgcolor="#F2EFFB">
+<tr><td align="center">
+<div style="font-size: 24px;">
+
+<form action="{{action}}" method="get">
+
+{% for s in selecttab %}
+<p style="margin: 15px;">
+  <label for="{{s.name}}">{{s.label}}</label>
+  <select name="{{s.name}}" id="{{s.name}}" style="font-size: 28px; width:90%">
+	{% for val in s.option %}
+    <option value="{{val.value}}">{{val.label}}</option>
+	{% endfor %}
+  </select>
+</p>
+{% endfor %}
+
+<p align="center" style="margin: 15px;">
+  <input type="submit" value="Action!" style="font-size: 32px; height:80px; width:160px">
+</p>
+
+</form>
+</div>
+</td></tr>
+</table>
+
+{% endblock %}
