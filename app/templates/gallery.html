@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+
+<table width="100%" height="50" style="font-size: 26px;">
+  <tr>
+    <th width="50%" bgcolor="#F78181"><a href="/gallery/photos">Photos</a></th>
+    <th bgcolor="#81DAF5"><a href="/gallery/video">Video</a></th>
+  </tr>
+</table>
+
+
+{% for msg in message %}
+<p><font size="4" color="red">{{msg}}</font></p>
+{% endfor %}
+
+{% for img in photos %}
+<img src="/static/photos/{{img}}" alt="{{img}}" width="50%">
+
+
+{% endfor %}
+{% endblock %}

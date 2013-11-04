@@ -1,7 +1,7 @@
 from flask import render_template, request
 from app import app
 import os
-from acutils import run_cmd
+from acutils import run_cmd, get_photos
 import options
 
 # not much to see here
@@ -16,28 +16,36 @@ def index():
 # Form to get arguments
 @app.route('/pic')
 def get_pic_args():
-	return render_template('shoot.html', title='Picture', selecttab=options.picture, action='/pic/shoot')
+	selecttab = [ options.noofpics, options.delay, options.exposure, options.res ]
+	return render_template('shoot.html', title='Picture', selecttab=selecttab, action='/pic/shoot')
 
 # Take snapshots using the args provided
 @app.route('/pic/shoot')
 def take_pic():
-	#stillexec = '/usr/bin/raspistill'
-	# temp exec file for testing
-	stillexec = '/home/torz/data/dev/python/actionCam/bin/raspistill'
-	fname = '-o /opt/data/pictures/img%04d.jpg'
-	otherargs = '-t 0 -q 75'
 	cmd = []
-	cmd.extend((stillexec, fname, otherargs))
-	# get the args from the URL
-	noofpics = request.args.get('pics', type=int)
-	delay = request.args.get('delay', type=int)
+	cmd.append('still')
+	# delay between pics
+	cmd.append(request.args.get('delay', type=str))
+	# how many pics to take
+	cmd.append(request.args.get('pics', type=str))
+	# Set image width <size>, height <size> 
+	if 	request.args.get('res', type=str) == 'high':
+		cmd.append('-w 2592 -h 1944')
+	elif request.args.get('res', type=str) == 'low':
+		cmd.append('-w 1280 -h 1024')
+	# Set jpeg quality <0 to 100>
+	cmd.append('-q 75')
+	# Output filename <filename>
+	cmd.append('-o /opt/data/torz/dev/python/actionCam/app/static/photos/img%04d.jpg')
+	# timeout
+	cmd.append('-t 0')
+	# Set thumbnail parameters (x:y:quality) 
+	cmd.append('-th 0:0:0')
+	# Do not display a preview window
+	cmd.append('-n')
 	# set exposure
 	cmd.append('-ex ' + request.args.get('exposure', type=str))
-	# set the res low
-	if request.args.get('res', type=str) == 'low':
-		cmd.append('-w 1280 -h 1024')
-	# add them to the command
-	msg = run_cmd(cmd, delay, noofpics)
+	msg = run_cmd(cmd)
 	return render_template('index.html', title='Pic Shoot', message=msg)
 
 #############
@@ -46,40 +54,44 @@ def take_pic():
 # Form to get arguments
 @app.route('/video')
 def get_video_args():
-	return render_template('shoot.html', title='Video', selecttab=options.video, action='/video/shoot')
+	selecttab = [ options.vidlength, options.delay, options.exposure, options.res ]
+	return render_template('shoot.html', title='Video', selecttab=selecttab, action='/video/shoot')
 
 # This function should start recording video with the parameters provided
 @app.route('/video/shoot')
 def start_video():
-	#videxec = '/usr/bin/raspivid'
-	# temp exec file for testing
-	videxec = '/home/torz/data/dev/python/actionCam/bin/raspivid'
-	fname = '-o /opt/data/video/vid%04d.h264'
-	otherargs = ''
 	cmd = []
-	cmd.extend((videxec, fname, otherargs))
+	cmd.append('video')
+	# delay before video starts
+	cmd.append(request.args.get('delay', type=str))
+	# Set image width <size>, height <size>
+	if request.args.get('res', type=str) == 'high':
+		cmd.append('-w 1920 -h 1080 -b 15000000')
+	elif request.args.get('res', type=str) == 'low':
+		res = '-w 1280 -h 720 -b 10000000'
 	# get length
 	cmd.append('-t ' + request.args.get('length', type=str))
-	delay = request.args.get('delay', type=int) * 1000
-	# set quality
-	if request.args.get('res', type=str) == 'low':
-		cmd.append('-w 1280 -h 720 -b 10000000')
-	else:
-		cmd.append('-b 15000000')
-	# add them to the command
-	msg = run_cmd(cmd, delay)
+	# Output filename <filename>
+	cmd.append('-o /opt/data/torz/dev/python/actionCam/app/static/video/vid%04d.h264')
+	# set exposure
+	cmd.append('-ex ' + request.args.get('exposure', type=str))
+	msg = run_cmd(cmd)
 	return render_template('index.html', title='Video Record', message=msg)
 
+@app.route('/gallery')
+def show_gallery():
+	message = ['Gallery']
+	photos = []
+	return render_template('gallery.html', title='Gallery', message=message, photos=photos)
+
 # List the vids and pics
-@app.route('/files')
-def list_files():
-	cwd = os.getcwd()
-	message = 'Listing dir: ' + cwd
-	filesincwd = os.listdir(cwd)
-	files = []
-	for f in filesincwd:
-		myfile = {}
-		myfile['name'] = f
-		myfile['fullpath'] = os.path.join(cwd, f)
-		files.append(myfile)
-	return render_template('files.html', title='File List', message=message, files=files)
+@app.route('/gallery/photos')
+def photo_gallery():
+	message = ['photo gallery']
+	photos = get_photos()
+	return render_template('gallery.html', title='File List', message=message, photos=photos)
+
+@app.route('/gallery/video')
+def vid_gallery():
+	message = ['still to come']
+	return render_template('index.html', title='Video gallery', message=message)
