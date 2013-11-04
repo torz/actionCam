@@ -1,6 +1,5 @@
 from flask import render_template, request
 from app import app
-import os
 from acutils import run_cmd, get_photos
 import options
 
