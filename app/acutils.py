@@ -11,13 +11,12 @@ def run_cmd(cmd):
 	except Exception as e:
 		return e
 
-def get_photos():
-	imgstore = '/opt/data/torz/dev/python/actionCam/app/static/photos'
-	filesinstore = os.listdir(imgstore)
-	photos = []
+def get_media(gallerydir, extension):
+	filesinstore = os.listdir(gallerydir)
+	mediafiles = []
 	for f in filesinstore:
-		if 'jpg' in f:
-			photos.append(f)
-	return photos
+		if extension in f:
+			mediafiles.append(f)
+	return mediafiles
 
 

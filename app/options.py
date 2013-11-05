@@ -1,3 +1,10 @@
+vidoestore = '/opt/data/actionCam/app/static/video'
+photostore = '/opt/data/actionCam/app/static/photos'
+
+# testing
+#vidoestore = '/opt/data/torz/dev/python/actionCam/app/static/video'
+#photostore = '/opt/data/torz/dev/python/actionCam/app/static/photos'
+
 noofpics = { 'name' : 'pics',
 	'label' : 'No of pics:',
 	'option' : [

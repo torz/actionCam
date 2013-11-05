@@ -1,6 +1,6 @@
 from flask import render_template, request
 from app import app
-from acutils import run_cmd, get_photos
+from acutils import run_cmd, get_media
 import options
 
 # not much to see here
@@ -35,7 +35,7 @@ def take_pic():
 	# Set jpeg quality <0 to 100>
 	cmd.append('-q 75')
 	# Output filename <filename>
-	cmd.append('-o /opt/data/torz/dev/python/actionCam/app/static/photos/img%04d.jpg')
+	cmd.append('-o ' + options.photostore + '/img%04d.jpg')
 	# timeout
 	cmd.append('-t 0')
 	# Set thumbnail parameters (x:y:quality) 
@@ -71,7 +71,7 @@ def start_video():
 	# get length
 	cmd.append('-t ' + request.args.get('length', type=str))
 	# Output filename <filename>
-	cmd.append('-o /opt/data/torz/dev/python/actionCam/app/static/video/vid%04d.h264')
+	cmd.append('-o ' + options.vidoestore + '/vid%04d.h264')
 	# set exposure
 	cmd.append('-ex ' + request.args.get('exposure', type=str))
 	msg = run_cmd(cmd)
@@ -86,11 +86,12 @@ def show_gallery():
 # List the vids and pics
 @app.route('/gallery/photos')
 def photo_gallery():
-	message = ['photo gallery']
-	photos = get_photos()
+	message = ['Photo gallery']
+	photos = get_media(options.photostore, '.jpg')
 	return render_template('gallery.html', title='File List', message=message, photos=photos)
 
 @app.route('/gallery/video')
 def vid_gallery():
-	message = ['still to come']
-	return render_template('index.html', title='Video gallery', message=message)
+	message = ['Video gallery']
+	videos = get_media(options.vidoestore, '.h264')
+	return render_template('vidgallery.html', title='Video gallery', message=message, videos=videos)
