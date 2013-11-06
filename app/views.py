@@ -80,18 +80,18 @@ def start_video():
 @app.route('/gallery')
 def show_gallery():
 	message = ['Gallery']
-	photos = []
-	return render_template('gallery.html', title='Gallery', message=message, photos=photos)
+	medfiles = []
+	return render_template('gallery.html', title='Gallery', message=message, medfiles=medfiles)
 
 # List the vids and pics
 @app.route('/gallery/photos')
 def photo_gallery():
 	message = ['Photo gallery']
-	photos = get_media(options.photostore, '.jpg')
-	return render_template('gallery.html', title='File List', message=message, photos=photos)
+	medfiles = get_media(options.photostore, '.jpg')
+	return render_template('gallery.html', title='Photo Gallery', message=message, medfiles=medfiles)
 
 @app.route('/gallery/video')
 def vid_gallery():
 	message = ['Video gallery']
-	videos = get_media(options.vidoestore, '.h264')
-	return render_template('vidgallery.html', title='Video gallery', message=message, videos=videos)
+	medfiles = get_media(options.vidoestore, '.h264')
+	return render_template('gallery.html', title='Video Gallery', message=message, medfiles=medfiles)

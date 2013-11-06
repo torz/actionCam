@@ -13,12 +13,18 @@
 <p><font size="4" color="red">{{msg}}</font></p>
 {% endfor %}
 
-{% for img in photos %}
+{% for mdf in medfiles %}
 <p style="margin: 15px;">
-<h2><a href="/static/photos/{{img}}">/static/photos/{{img}}</a></h2>
-<a href="/static/photos/{{img}}">
-<img border="1" src="/static/photos/{{img}}" alt="Not found" style="max-height:auto; max-width:60%;">
+
+{% if title == "Photo Gallery" %}
+<h2><a href="/static/photos/{{mdf}}">/static/photos/{{mdf}}</a></h2>
+<a href="/static/photos/{{mdf}}">
+<img border="1" src="/static/photos/{{mdf}}" alt="Not found" style="max-height:auto; max-width:60%;">
 </a>
+{% else %}
+<h2><a href="/static/video/{{mdf}}">/static/video/{{mdf}}</a></h2>
+</a>
+{% endif %}
 </p>
 
 
